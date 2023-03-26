@@ -7,6 +7,10 @@ defmodule ReportsGen do
     Map.put(report, id, report[id] + price)
   end
 
+  def fetch_higher_cost(report) do
+    Enum.max_by(report, fn {_key, value} -> value end)
+  end
+
   def build(filename) do
     filename
     |> ReportsGen.Parser.parse_file()
