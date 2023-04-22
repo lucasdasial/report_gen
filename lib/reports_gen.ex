@@ -12,4 +12,9 @@ defmodule ReportsGen do
   def initial_report() do
     Enum.into(1..30, %{}, fn value -> {Integer.to_string(value), 0} end)
   end
+
+  def fetch_higher_cost(report) do
+    Enum.max_by(report, fn {_key,value} -> value end)
+
+  end
 end
