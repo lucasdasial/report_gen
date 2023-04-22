@@ -1,20 +1,12 @@
 defmodule ReportsGen do
+  alias ReportsGen.Parser
+
   def build(filename) do
-    "reports/#{filename}"
-    |> File.stream!()
-    |> Enum.reduce(initial_report(), fn line, report ->
-      [id, food_name, price] = parse_lie(line)
-      Map.put(report, id,report[id] + price)
+    filename
+    |> Parser.parse_file()
+    |> Enum.reduce(initial_report(), fn [id, _food_name, price], report ->
+      Map.put(report, id, report[id] + price)
     end)
-  end
-
-  defp parse_lie(line) do
-    line
-    |> String.trim()
-    |> String.split(",")
-    |> List.update_at(2, fn item -> String.to_integer(item) end)
-
-    # |> List.update_at(2,  &String.to_integer/1) -> anonymous function short
   end
 
   def initial_report() do
