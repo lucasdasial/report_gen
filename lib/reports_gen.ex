@@ -1,21 +1,14 @@
 defmodule ReportsGen do
-  defp report_acc do
-    Enum.into(1..30, %{}, &{Integer.to_string(&1), 0})
-  end
-
-  defp sum_values([id, food_name, price], report) do
-    Map.put(report, id, report[id] + price)
-  end
-
-  def fetch_higher_cost(report) do
-    Enum.max_by(report, fn {_key, value} -> value end)
-  end
-
   def build(filename) do
-    filename
-    |> ReportsGen.Parser.parse_file()
-    |> Enum.reduce(report_acc(), fn line, report ->
-      sum_values(line, report)
-    end)
+    "reports/#{filename}"
+    |> File.read()
+    |> handle_file()
   end
+
+  defp handle_file({:ok,file_content}) do file_content end
+  defp handle_file({:error,_reason}) do
+    "Error when trying open file or file does not exist"
+  end
+
+
 end
